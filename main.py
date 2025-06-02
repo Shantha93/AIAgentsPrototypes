@@ -10,10 +10,10 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langgraph.graph import StateGraph, END
 
-# --- 1. Load Environment Variables (for Azure OpenAI) ---
+# --- 1. Load Environment Variables (for Azure OpenAI) --- 
 load_dotenv()
 
-# --- 2. Define State for the Graph ---
+# Below Datastructure is used in order to capture all details of one ARXIV paper
 class Paper(TypedDict):
     title: str
     authors: List[str]
@@ -25,6 +25,7 @@ class Paper(TypedDict):
 class SummarizedPaper(Paper):
     layman_summary: str
 
+# --- 2. Define State for the Graph ---
 class AgentState(TypedDict):
     query_categories: List[str]
     num_papers: int
@@ -36,9 +37,10 @@ class AgentState(TypedDict):
 # --- 3. Initialize Azure OpenAI LLM ---
 # Ensure your .env file has AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT,
 # AZURE_OPENAI_API_VERSION, and AZURE_OPENAI_CHAT_DEPLOYMENT_NAME
+# I have set the varibales like AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT in my environment variables setting .. Alternatively dot env could also be used here
 try:
     llm = AzureChatOpenAI(
-        azure_deployment="gpt-4o-mini",  # or your deployment
+        azure_deployment="gpt-4o-mini",  # or your deployment, you can also use "os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")"
         api_version="2024-12-01-preview",  # or your api version
         temperature=0.2,
         max_tokens=250, # Max tokens for summary
@@ -88,7 +90,7 @@ def fetch_arxiv_papers_node(state: AgentState) -> Dict:
         print(f"Error fetching from ArXiv: {e}")
         return {"fetched_papers": [], "error_message": f"ArXiv API error: {str(e)}"}
 
-# Node 2: Summarize papers using Azure OpenAI LLM
+
 summarization_prompt_template = ChatPromptTemplate.from_messages([
     ("system", "You are an expert science communicator. Your task is to summarize the following research paper abstract in simple, layman's terms. Avoid all jargon and complex technical details. Explain the core idea, what problem it tries to solve, and its potential impact, as if you were explaining it to a 10-year-old or someone completely new to AI. The summary should be concise, ideally 2-4 sentences. Focus on clarity and simplicity above all else."),
     ("human", "Please summarize this abstract:\n\nTitle: {title}\n\nAbstract: {abstract}")
@@ -96,6 +98,7 @@ summarization_prompt_template = ChatPromptTemplate.from_messages([
 
 summarization_chain = summarization_prompt_template | llm | StrOutputParser()
 
+# Node 2: Summarize papers using Azure OpenAI LLM
 def summarize_papers_node(state: AgentState) -> Dict:
     try:
             
@@ -117,16 +120,6 @@ def summarize_papers_node(state: AgentState) -> Dict:
         return {"summarized_papers": summarized_papers_data, "error_message": state.get("error_message")}
     except Exception:
         import traceback; traceback.print_exc();
-                
-    
-'''
-            except Exception as e:
-                print(f"Error summarizing paper '{paper['title']}': {e}")
-                summarized_paper_entry: SummarizedPaper = {**paper, "layman_summary": f"Error during summarization: {str(e)}"} # type: ignore
-                summarized_papers_data.append(summarized_paper_entry)
-'''
-      
-   
 
 # Node 3: Compile the final report
 def compile_report_node(state: AgentState) -> Dict:
@@ -166,13 +159,7 @@ workflow.add_edge("compile_report", END) # END signifies the workflow completion
 
 # Compile the graph
 app = workflow.compile()
-from IPython.display import Image, display
 
-try:
-    display(Image(app.get_graph().draw_mermaid_png()))
-except Exception:
-    # This requires some extra dependencies and is optional
-    pass
 # --- 6. Run the Workflow ---
 def runAgents(num_papers:int):
     # Define initial inputs for the workflow
