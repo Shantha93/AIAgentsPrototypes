@@ -4,7 +4,6 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Deployed-brightgreen.svg)](https://streamlit.io)
 [![LangChain/LangGraph](https://img.shields.io/badge/LangChain-LangGraph-orange.svg)](https://www.langchain.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- Add other relevant badges if you have them, e.g., for specific LLMs used, arXiv API version, etc. -->
 
 Stay ahead of the curve in AI research! This agent fetches the latest papers from the AI categories on arXiv (cs.AI, cs.LG, cs.CL, etc.) and provides concise, AI-generated summaries, all through a user-friendly Streamlit interface. Powered by a LangGraph agent for robust and extensible workflow management.
