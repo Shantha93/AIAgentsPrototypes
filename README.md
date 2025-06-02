@@ -76,7 +76,7 @@ Follow these steps to get the AI arXiv Paper Summarizer running locally:
 2.  **Clone the Repository:**
     ```bash
     git clone https://github.com/Shantha93/AIAgentsPrototypes.git
-    cd YOUR_REPOSITORY_NAME
+    cd AIAgentsPrototypes
     ```
 
 3.  **Create a Virtual Environment (Recommended):**
