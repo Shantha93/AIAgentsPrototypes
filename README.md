@@ -17,7 +17,7 @@ Stay ahead of the curve in AI research! This agent fetches the latest papers fro
 *   **AI-Powered Summaries:** Leverages Large Language Models (LLMs) via LangChain to generate insightful summaries of paper abstracts.
 *   **Interactive UI:** Built with Streamlit for an intuitive and easy-to-use web interface.
 *   **LangGraph Agent:** Utilizes LangGraph for a clear, stateful, and extensible agentic workflow, managing fetching, processing, and summarization steps.
-*   **Customizable:** (Potentially - add if you have these)
+*   **Customizable:** (Potentially - Run this on any Model and extend the prototype, by adding more features to the flow. )
 *   Specify the number of papers to fetch.
 *   **Easy to Run:** Simple setup and execution.
 
@@ -25,11 +25,7 @@ Stay ahead of the curve in AI research! This agent fetches the latest papers fro
 
 ## 📸 Demo / Screenshot
 
-**(Highly Recommended: Add a GIF or a screenshot of your Streamlit UI in action here!)**
-
-*Example placeholder:*
-![App Screenshot](https://via.placeholder.com/700x400.png?text=Your+Awesome+Streamlit+UI+Screenshot+Here)
-*Replace the above URL with a link to your actual screenshot or GIF.*
+![App Screenshot](https://github.com/Shantha93/AIAgentsPrototypes/blob/main/Arxiv.PNG)
 
 ---
 
@@ -37,16 +33,16 @@ Stay ahead of the curve in AI research! This agent fetches the latest papers fro
 
 The core of this application is a LangGraph agent defined in `main.py`. This agent orchestrates the following steps:
 
-1.  **Fetch Papers:**
+1.  **Fetch Papers Agent:**
     *   The agent connects to the arXiv API.
-    *   It queries for the latest papers in specified AI categories (e.g., `cs.AI`, `cs.LG`).
+    *   It queries for the latest papers in specified AI categories (e.g., "cs.AI", "cs.LG", "stat.ML").
     *   It retrieves metadata for these papers, including titles, authors, and abstracts.
-2.  **Pre-process Data:**
-    *   Relevant information (title, abstract, arXiv ID, authors) is extracted for each paper.
-3.  **Summarize Papers:**
-    *   For each paper's abstract, the agent uses a LangChain LLM (e.g., OpenAI's GPT, a Hugging Face model) to generate a concise summary.
-    *   This involves a carefully crafted prompt to ensure the summary is focused and informative.
-4.  **Present Results:**
+2.  **Summarize Papers Agent:**
+    *   For each paper's abstract, the agent uses a LangChain LLM (e.g., OpenAI's GPT in this case) to generate a concise summary.
+    *   This involves a carefully crafted prompt to ensure the summary is focused and informative and understandable even by a Layman 
+4.  **Complie Report Agent:**
+    * Complies final report from all the papers summarised by previous agent and produces the final output in consolidated manner so it could be well presented.
+5.  **Streamlit UI**
     *   The `ui.py` script uses Streamlit to:
         *   Provide an interface to trigger the agent.
         *   Display the fetched papers along with their AI-generated summaries in a readable format.
@@ -63,7 +59,7 @@ The LangGraph structure allows for clear separation of these concerns, error han
 *   **LangGraph (LangChain):** For defining and running the AI agent workflow (`main.py`).
 *   **LangChain:** For LLM integrations, prompt management, and other AI building blocks.
 *   **arXiv API Client:** (e.g., the `arxiv` Python library) For fetching paper data.
-*   **LLM Provider:** (e.g., OpenAI, Hugging Face Hub, Anthropic - specify which one you are primarily using or if it's configurable).
+*   **LLM Provider:** We have used OpenAI here, however this project could be model agnostic with minimal changes
 *   **Dotenv:** (Recommended) For managing API keys.
 
 ---
@@ -79,7 +75,7 @@ Follow these steps to get the AI arXiv Paper Summarizer running locally:
 
 2.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git
+    git clone https://github.com/Shantha93/AIAgentsPrototypes.git
     cd YOUR_REPOSITORY_NAME
     ```
 
@@ -99,10 +95,8 @@ Follow these steps to get the AI arXiv Paper Summarizer running locally:
 
 5.  **Set Up API Keys:**
     *   You'll need an API key from your chosen LLM provider (e.g., OpenAI).
-    *   Create a `.env` file in the root directory of the project:
-        ```bash
-        touch .env
-        ```
+    *   Update the keys in the `.env` file present the root directory of the project:
+          
     *   Add your API key(s) to the `.env` file. For example, if using OpenAI:
         ```env
         # .env
